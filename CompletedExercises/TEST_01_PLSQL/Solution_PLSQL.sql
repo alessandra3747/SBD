@@ -1,0 +1,65 @@
+-- Aleksandra Fus s30395
+
+--ZADANIE 1
+CREATE OR REPLACE PROCEDURE zad1 (v_rok INT, v_srednia NUMBER)
+IS
+    v_studentId INT;
+    v_sredniaObliczona NUMBER;
+    CURSOR kursor IS SELECT STUDENT.IDSTUDENT, AVG(OCENA.WARTOSC)
+                     FROM STUDENT INNER JOIN OCENA ON STUDENT.IDSTUDENT = OCENA.IDSTUDENT
+                     WHERE ROK = v_rok
+                     GROUP BY STUDENT.IDSTUDENT;
+BEGIN
+    OPEN kursor;
+
+    FETCH kursor INTO v_studentId, v_sredniaObliczona;
+
+    WHILE kursor%FOUND LOOP
+        DBMS_OUTPUT.PUT_LINE('STUDENT ID: ' || v_studentId || ' SREDNIA: ' || v_sredniaObliczona);
+
+        IF v_sredniaObliczona < v_srednia THEN
+            DELETE FROM OCENA WHERE IDSTUDENT = v_studentId;
+            DELETE FROM STUDENT WHERE IDSTUDENT = v_studentId;
+        END IF;
+
+        FETCH kursor INTO v_studentId, v_sredniaObliczona;
+    END LOOP;
+
+    CLOSE kursor;
+END;
+
+    --TEST:
+CALL zad1(1, 3.1);
+
+/
+
+--ZADANIE 2
+CREATE OR REPLACE TRIGGER zad2
+    BEFORE INSERT OR UPDATE OR DELETE
+    ON OCENA
+    FOR EACH ROW
+    BEGIN
+
+        IF DELETING AND :OLD.PRZEDMIOT = 'SBD' THEN
+            RAISE_APPLICATION_ERROR(-20100,'NIE MOZNA USUNAC OCENY Z PRZEDMIOTU SBD');
+        END IF;
+
+        IF INSERTING AND :NEW.WARTOSC NOT IN (2 , 3 , 3.5 , 4 , 4.5 , 5) THEN
+            :NEW.WARTOSC := 2;
+            DBMS_OUTPUT.PUT_LINE('PODANA WARTOSC JEST NIEPRAWIDLOWA, ZAMIENIONO JĄ NA 2');
+        END IF;
+
+        IF UPDATING AND :NEW.IDSTUDENT <> :OLD.IDSTUDENT THEN
+            :NEW.IDSTUDENT := :OLD.IDSTUDENT;
+            DBMS_OUTPUT.PUT_LINE('NIE MOZNA ZMIENIC POLA IDSTUDENT, PRZYWROCONO STARA WARTOSC POLA');
+        END IF;
+
+    END;
+
+    --TEST
+    DELETE FROM OCENA WHERE IDOCENA = 2;
+
+    INSERT INTO OCENA VALUES (100, 'RBD', 6, 1);
+
+    UPDATE OCENA SET IDSTUDENT = 100 WHERE IDSTUDENT = 1;
+
