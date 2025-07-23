@@ -1,0 +1,21 @@
+Zaproponuj schemat firmy spedycyjnej, która przechowuje informacje o pracownikach, klientach, zleceniach i samochodach. 
+
+Firma posiada wiele pracowników. Musimy znać ich pesel, imię, nazwisko, pensję, datę zatrudnienia i ewentualnie datę zwolnienia.
+Pracownik może być kierowcą lub pracownikiem administracyjnym. 
+W pierwszym przypadku, ważna jest informacja o kategorii prawa jazdy(może ich mieć kilka), jakie posiada i czy jest dostępny. 
+W drugim przypadku natomiast, ważny jest dział, w którym pracuje i kto jest jego przełożonym.
+
+Jeden kierowca może mieć wiele samochodów, a jeden samochód może mieć wiele kierowców, korzystających z niego w różnych terminach.
+O samochodzie wiemy, że ma określone id, markę, typ, numer rejestracyjny, pojemność zbiornika i rok produkcji. 
+Ważne są rownież informacje o jego dostępności i sprawności. Ponadto, każdy samochód posiada informacje o swoim przeglądzie. 
+Każdy samochód ma jeden przegląd, a każdy przegląd może dotyczyć tylko jednego samochodu. Przegląd zawiera id, datę, koszt i opis.
+
+Firma spedycyjna posiada klientów. Każdy klient posiada unikatowy numer NIP, swą nazwę oraz informacje o mailu i numerze telefonu. 
+
+Jeden klient może złożyć wiele zleceń, podczas gdy jedno zlecenie zawsze należy do tylko jednego klienta. 
+Każde zlecenie posiada swój opis, informacje o trasie, jego wartości i dacie opłacenia.
+
+Każde jedno zlecenie może być wykonane przez jednego lub wielu kierowców, jeśli zajdzie taka potrzeba, podczas gdy jeden kierowca może mieć wiele zleceń.
+
+
+
